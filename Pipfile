@@ -6,6 +6,7 @@ name = "pypi"
 [packages]
 environs = "*"
 caldav = "*"
+icalevents = {editable = true, git = "https://github.com/stickystyle/icalevents.git"}
 
 [dev-packages]
 
