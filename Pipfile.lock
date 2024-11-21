@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "5ced34a26e9500fc9090c0163b1b36cd649601869246ce1c88284146093c88b2"
+            "sha256": "21b7d1900e7b5978476bdcb2ffd17d331b3107b87f5962ce687bcbe7cf4f6464"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -169,10 +169,13 @@
             "version": "==5.0.13"
         },
         "icalevents": {
-            "editable": true,
-            "git": "https://github.com/stickystyle/icalevents.git",
+            "hashes": [
+                "sha256:96e254d4181b3b595d9d3ea4c0a161887cc58e79c7d0ca132235b493ffb34df1",
+                "sha256:af95e37d5fd1508bb90b1c8cc7557332736e4ad7ff8f3e816b3b1498f6bd5e69"
+            ],
+            "index": "pypi",
             "markers": "python_version >= '3.9' and python_version < '4.0'",
-            "ref": "8d068ef77c73a7370886ec0937aff48b76947cc1"
+            "version": "==0.1.29"
         },
         "idna": {
             "hashes": [

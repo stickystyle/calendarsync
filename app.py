@@ -10,6 +10,8 @@ my_tz = ZoneInfo("America/New_York")
 env = environs.Env()
 environs.Env.read_env()
 
+NORMALIZED_NAME = env("NORMALIZED_NAME")
+
 logging.basicConfig(level=env("LOG_LEVEL", "INFO"))  # Set the desired logging level
 
 # TODO: There is a potential issue if the script runs at the same time as tuckers software is updating the calendar
@@ -21,10 +23,7 @@ def sync_calendar(src_events_dict, dest_events_dict, destination_cal):
 
     # Remove any events that are not in the SRC calendar
     for event_id, dest_event in dest_events_dict.items():
-        if (
-            event_id not in src_event_dict
-            and "Dicks Sporting Goods 00199-WINSTON SALEM-NC" in event_id
-        ):
+        if event_id not in src_event_dict and NORMALIZED_NAME in event_id:
             logging.info("Deleting event: %s", dest_event)
             dest_event.delete()
 
@@ -32,7 +31,11 @@ def sync_calendar(src_events_dict, dest_events_dict, destination_cal):
     for event_id, src_event in src_events_dict.items():
         if event_id not in dest_event_dict:
             logging.info("Adding event: %s", src_event)
-            destination_cal.add_event(src_event.component.to_ical())
+            destination_cal.save_event(
+                dtstart=src_event.start,
+                dtend=src_event.end,
+                summary=NORMALIZED_NAME,
+            )
 
 
 with caldav.DAVClient(
@@ -44,8 +47,9 @@ with caldav.DAVClient(
     src_events = events(
         env("SRC_CAL"), fix_apple=True, sort=True, end=now + timedelta(days=21)
     )
+
     src_event_dict = {
-        f"{event.summary}-{event.start.isoformat()}-{event.end.isoformat()}": event
+        f"{NORMALIZED_NAME}-{event.start.isoformat()}-{event.end.isoformat()}": event
         for event in src_events
     }
 
@@ -61,8 +65,9 @@ with caldav.DAVClient(
     ]
 
     dest_event_dict = {
-        f"{event.vobject_instance.vevent.summary.value}-{event.vobject_instance.vevent.dtstart.value.isoformat()}-{event.vobject_instance.vevent.dtend.value.isoformat()}": event
+        f"{NORMALIZED_NAME}-{event.vobject_instance.vevent.dtstart.value.isoformat()}-{event.vobject_instance.vevent.dtend.value.isoformat()}": event
         for event in dest_events
+        if NORMALIZED_NAME in event.vobject_instance.vevent.summary.value
     }
 
     logging.info("Syncing calendars")
