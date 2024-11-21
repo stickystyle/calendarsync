@@ -21,7 +21,10 @@ def sync_calendar(src_events_dict, dest_events_dict, destination_cal):
 
     # Remove any events that are not in the SRC calendar
     for event_id, dest_event in dest_events_dict.items():
-        if event_id not in src_event_dict:
+        if (
+            event_id not in src_event_dict
+            and "Dicks Sporting Goods 00199-WINSTON SALEM-NC" in event_id
+        ):
             logging.info("Deleting event: %s", dest_event)
             dest_event.delete()
 
