@@ -10,5 +10,8 @@ icalevents = {editable = true, git = "https://github.com/stickystyle/icalevents.
 
 [dev-packages]
 
+[scripts]
+sync = "python app.py"
+
 [requires]
 python_version = "3.11"
